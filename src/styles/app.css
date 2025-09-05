@@ -1,30 +1,220 @@
 @import "tailwindcss";
 
-/* === Single source of truth for design tokens === */
+/* ===== Design Tokens — single @theme block ===== */
 @theme {
-  /* Colors */
-  --color-surface: white;
-  --color-text: black;
-  --color-brand: oklch(0.72 0.11 221);
+  /* Base colors (match palette) */
+  --color-brand: #EB7405;   /* Brand A (amber) */
+  --color-ink:   #353531;   /* Neutral */
+  --color-text:  var(--color-ink); /* maps to Tailwind text-text */
+  --color-gold:  #E69005;   /* Brand B (gold) */
+  --color-accent:#08B3E2;   /* Blue */
+  --color-muted: #ACAAC0;   /* Lavender gray */
+  --color-bg:    #FFFFFF;
+  --color-surface: var(--color-bg);
+  --color-border-subtle: color-mix(in srgb, var(--color-ink) 10%, white);
+  --color-border-strong: color-mix(in srgb, var(--color-ink) 18%, white);
+
+  /* 19-step ramps (9 lighter, base, 9 darker) */
+  /* Brand A */
+  --color-brand-p90: #FEF1E5;
+  --color-brand-p80: #FEE3CA;
+  --color-brand-p70: #FDD5B0;
+  --color-brand-p60: #FDC795;
+  --color-brand-p50: #FCB97B;
+  --color-brand-p40: #FCAB60;
+  --color-brand-p30: #FB9D46;
+  --color-brand-p20: #FB8F2B;
+  --color-brand-p10: #FA8111;
+  --color-brand-n10: #D36804;
+  --color-brand-n20: #BC5D04;
+  --color-brand-n30: #A45103;
+  --color-brand-n40: #8D4603;
+  --color-brand-n50: #753A02;
+  --color-brand-n60: #5E2E02;
+  --color-brand-n70: #462301;
+  --color-brand-n80: #2F1701;
+  --color-brand-n90: #170C00;
+
+  /* Ink */
+  --color-ink-p90: #EBEBEA;
+  --color-ink-p80: #D8D8D5;
+  --color-ink-p70: #C4C4BF;
+  --color-ink-p60: #B1B1AA;
+  --color-ink-p50: #9D9D95;
+  --color-ink-p40: #898980;
+  --color-ink-p30: #75756C;
+  --color-ink-p20: #5F5F58;
+  --color-ink-p10: #4A4A45;
+  --color-ink-n10: #30302C;
+  --color-ink-n20: #2A2A27;
+  --color-ink-n30: #252522;
+  --color-ink-n40: #20201D;
+  --color-ink-n50: #1B1B18;
+  --color-ink-n60: #151514;
+  --color-ink-n70: #10100F;
+  --color-ink-n80: #0B0B0A;
+  --color-ink-n90: #050505;
+
+  /* Brand B (Gold) */
+  --color-gold-p90: #FEF4E4;
+  --color-gold-p80: #FEEAC9;
+  --color-gold-p70: #FDDFAE;
+  --color-gold-p60: #FDD493;
+  --color-gold-p50: #FCCA78;
+  --color-gold-p40: #FCBF5D;
+  --color-gold-p30: #FBB442;
+  --color-gold-p20: #FBAA27;
+  --color-gold-p10: #FA9F0C;
+  --color-gold-n10: #CF8104;
+  --color-gold-n20: #B87304;
+  --color-gold-n30: #A16503;
+  --color-gold-n40: #8A5603;
+  --color-gold-n50: #734802;
+  --color-gold-n60: #5C3902;
+  --color-gold-n70: #452B01;
+  --color-gold-n80: #2E1D01;
+  --color-gold-n90: #170E00;
+
+  /* Accent */
+  --color-accent-p90: #E4F8FE;
+  --color-accent-p80: #CAF2FD;
+  --color-accent-p70: #AFEBFC;
+  --color-accent-p60: #95E5FB;
+  --color-accent-p50: #7ADEFA;
+  --color-accent-p40: #60D8F9;
+  --color-accent-p30: #45D1F8;
+  --color-accent-p20: #2ACBF7;
+  --color-accent-p10: #10C4F6;
+  --color-accent-n10: #07A1CC;
+  --color-accent-n20: #078FB5;
+  --color-accent-n30: #067D9E;
+  --color-accent-n40: #056B88;
+  --color-accent-n50: #045A71;
+  --color-accent-n60: #03485B;
+  --color-accent-n70: #023644;
+  --color-accent-n80: #02242D;
+  --color-accent-n90: #011217;
+
+  /* Muted */
+  --color-muted-p90: #F7F6F9;
+  --color-muted-p80: #EEEEF2;
+  --color-muted-p70: #E6E5EC;
+  --color-muted-p60: #DEDDE6;
+  --color-muted-p50: #D5D4E0;
+  --color-muted-p40: #CDCCD9;
+  --color-muted-p30: #C5C3D3;
+  --color-muted-p20: #BCBBCD;
+  --color-muted-p10: #B4B2C6;
+  --color-muted-n10: #9795B1;
+  --color-muted-n20: #8380A1;
+  --color-muted-n30: #6F6C92;
+  --color-muted-n40: #5F5C7D;
+  --color-muted-n50: #4F4D68;
+  --color-muted-n60: #3F3E53;
+  --color-muted-n70: #302E3E;
+  --color-muted-n80: #201F2A;
+  --color-muted-n90: #100F15;
 
   /* Radii */
-  --radius-card: 1rem;
-
-  /* Spacing */
-  --spacing-section: 4rem;
-  --spacing-gutter: 1rem;
+  --radius-sm: 10px;
+  --radius-md: 20px;
+  --radius-DEFAULT: 20px;
+  --radius-lg: 40px;
+  --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-elev-1: 0 1px 2px 0 rgb(0 0 0 / 0.06);
+  --shadow-sm: 0px 1px 2px 0px rgb(0 0 0 / 0.05);
+  --shadow-DEFAULT: 0px 1px 2px 0px rgb(0 0 0 / 0.05);
+  --shadow-md: 0px 4px 16px -2px rgb(0 0 0 / 0.08), 0px 2px 4px -1px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0px 12px 32px -4px rgb(0 0 0 / 0.08), 0px 4px 8px -2px rgb(0 0 0 / 0.08);
+  --shadow-overlay: 0px 12px 32px -4px rgb(0 0 0 / 0.08), 0px 4px 8px -2px rgb(0 0 0 / 0.08);
 
-  /* Typography (sizes) */
-  --text-h1: 2rem;
-  --text-h2: 1.25rem;
-  --text-body: 1rem;
+  /* XL spacing tokens (also keep simple section/gutter) */
+  --spacing-112: 28rem;
+  --spacing-144: 36rem;
+  --spacing-192: 48rem;
+  --spacing-256: 64rem;
+  --spacing-320: 80rem;
+  --space-gutter: 1rem;
+  --space-section: 2rem;
+
+  /* Typography (line-heights +90% from original) */
+  --font-sans: "Assistant", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  --size-caption: 16px;  --line-caption: 18px;  --weight-caption: 400; --track-caption: 0em;
+  --size-caption-bold: 16px;  --line-caption-bold: 18px;  --weight-caption-bold: 500; --track-caption-bold: 0em;
+  --size-body: 20px;     --line-body: 20px;     --weight-body: 400;  --track-body: 0em;
+  --size-body-bold: 20px;--line-body-bold: 20px;--weight-body-bold: 500;--track-body-bold: 0em;
+
+  /* Originals: H3=20,H2=24,H1=36 → ×1.3^3 ≈ 2.197 */
+  --size-heading-3: 30px; --line-heading-3: 43.94px; --weight-heading-3: 700; --track-heading-3: 0em;
+  --size-heading-2: 40px; --line-heading-2: 52.73px; --weight-heading-2: 600; --track-heading-2: 0em;
+  --size-heading-1: 60px; --line-heading-1: 79.09px; --weight-heading-1: 500; --track-heading-1: 0em;
+
+  /* Component defaults (used by specimens; optional) */
+  --card-radius: var(--radius-DEFAULT);
+  --card-shadow: var(--shadow-md);
+  --card-shadow-hover: var(--shadow-lg);
+  --card-border: var(--color-border-subtle);
+  --card-bg: var(--color-surface);
+  --card-padding-x: 1rem;
+  --card-padding-y: 1rem;
+
+  /* Container padding (viewport-aware) */
+  --container-padding-base: 16px;
+  --container-padding-sm: calc((100vw + 16px - 640px) / 2);
+  --container-padding-md: calc((100vw + 16px - 768px) / 2);
+  --container-padding-lg: calc((100vw + 16px - 1024px) / 2);
+  --container-padding-xl: calc((100vw + 16px - 1280px) / 2);
+  --container-padding-2xl: calc((100vw + 16px - 1536px) / 2);
 }
 
-/* Base element defaults may reference tokens; avoid hard-coded values elsewhere */
-html, body {
-  background: var(--color-surface);
-  color: var(--color-text);
-}
+/* ===== Base ===== */
+:root { color: var(--color-ink); background-color: var(--color-bg); font-family: var(--font-sans); }
+
+/* Container helper */
+.container-token { padding-inline: var(--container-padding-base); }
+@media (min-width: 640px){ .container-token { padding-inline: var(--container-padding-sm);} }
+@media (min-width: 768px){ .container-token { padding-inline: var(--container-padding-md);} }
+@media (min-width: 1024px){ .container-token { padding-inline: var(--container-padding-lg);} }
+@media (min-width: 1280px){ .container-token { padding-inline: var(--container-padding-xl);} }
+@media (min-width: 1536px){ .container-token { padding-inline: var(--container-padding-2xl);} }
+
+/* ===== Utilities the site uses (token-backed) ===== */
+.text-h1{font-size:var(--size-heading-1);line-height:var(--line-heading-1);letter-spacing:var(--track-heading-1);}
+.text-h2{font-size:var(--size-heading-2);line-height:var(--line-heading-2);letter-spacing:var(--track-heading-2);}
+.text-h3{font-size:var(--size-heading-3);line-height:var(--line-heading-3);letter-spacing:var(--track-heading-3);}
+.text-body{font-size:var(--size-body);line-height:var(--line-body);letter-spacing:var(--track-body);}
+.text-caption{font-size:var(--size-caption);line-height:var(--line-caption);letter-spacing:var(--track-caption);}
+
+.p-gutter{padding:var(--space-gutter);}
+.mt-gutter{margin-top:var(--space-gutter);}
+.py-section{padding-top:var(--space-section);padding-bottom:var(--space-section);}
+.mt-section{margin-top:var(--space-section);}
+.gap-gutter{gap:var(--space-gutter);} /* used on index grid */
+
+.rounded-card{border-radius:var(--radius-DEFAULT);}
+.shadow-elev-1{box-shadow:var(--shadow-md);}
+.shadow-elev-2{box-shadow:var(--shadow-lg);}
+.bg-surface{background-color:var(--color-surface);}
+.border-subtle{border-color:var(--color-border-subtle);}
+
+/* ===== Component specimens (used on moodboard) ===== */
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--card-radius);box-shadow:var(--card-shadow);overflow:clip;}
+.card:hover{box-shadow:var(--card-shadow-hover);}
+.card-header{padding:calc(var(--card-padding-y) - .25rem) calc(var(--card-padding-x) + .25rem);font-weight:600;}
+.card-body{padding:var(--card-padding-y) var(--card-padding-x);}
+.card-footer{padding:var(--card-padding-y) var(--card-padding-x);border-top:1px solid var(--color-border-subtle);}
+.card--sm{--card-padding-x:.75rem;--card-padding-y:.75rem;--card-radius:var(--radius-sm);}
+.card--lg{--card-padding-x:1.5rem;--card-padding-y:1.25rem;--card-radius:var(--radius-lg);}
+.card--elevated{--card-shadow:var(--shadow-lg);}
+.card--overlay{--card-shadow:var(--shadow-overlay);}
+
+.swatch-row{height:2rem;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;}
+
+/* Demo grid helpers */
+.example-grid{display:grid;gap:1rem;grid-template-columns:repeat(1,minmax(0,1fr));}
+@media (min-width:640px){.example-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media (min-width:1024px){.example-grid{grid-template-columns:repeat(4,minmax(0,1fr));}}
+@media (min-width:1280px){.example-grid-5{display:grid;gap:1rem;grid-template-columns:repeat(5,minmax(0,1fr));}}

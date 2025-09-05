@@ -1,54 +1,272 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import "../styles/app.css";
+
+/** WCAG contrast helpers (build-time) */
+function hexToRgb(h) {
+  const s = h.replace("#",""); return {
+    r: parseInt(s.slice(0,2),16)/255,
+    g: parseInt(s.slice(2,4),16)/255,
+    b: parseInt(s.slice(4,6),16)/255
+  };
+}
+function lin(c){ return c <= 0.03928 ? c/12.92 : Math.pow((c + 0.055)/1.055, 2.4); }
+function lum(hex){ const {r,g,b}=hexToRgb(hex); return 0.2126*lin(r)+0.7152*lin(g)+0.0722*lin(b); }
+function contrast(bg, fg){ const L1=Math.max(lum(bg), lum(fg)), L2=Math.min(lum(bg), lum(fg)); return (L1+0.05)/(L2+0.05); }
+function bestTextColor(bgHex){
+  const cBlack = contrast(bgHex, "#000000");
+  const cWhite = contrast(bgHex, "#FFFFFF");
+  if (cBlack >= 4.5 && cBlack >= cWhite) return "#000000";
+  if (cWhite >= 4.5 && cWhite >= cBlack) return "#FFFFFF";
+  return cBlack >= cWhite ? "#000000" : "#FFFFFF";
+}
+
+/* Exact ramps (top→bottom = light→dark). Hexes match reference. */
+const ramps = [
+  {
+    label: "Brand A",
+    rows: [
+      ["--color-brand-p90", "#FEF1E5"],
+      ["--color-brand-p80", "#FEE3CA"],
+      ["--color-brand-p70", "#FDD5B0"],
+      ["--color-brand-p60", "#FDC795"],
+      ["--color-brand-p50", "#FCB97B"],
+      ["--color-brand-p40", "#FCAB60"],
+      ["--color-brand-p30", "#FB9D46"],
+      ["--color-brand-p20", "#FB8F2B"],
+      ["--color-brand-p10", "#FA8111"],
+      ["--color-brand",     "#EB7405"],
+      ["--color-brand-n10", "#D36804"],
+      ["--color-brand-n20", "#BC5D04"],
+      ["--color-brand-n30", "#A45103"],
+      ["--color-brand-n40", "#8D4603"],
+      ["--color-brand-n50", "#753A02"],
+      ["--color-brand-n60", "#5E2E02"],
+      ["--color-brand-n70", "#462301"],
+      ["--color-brand-n80", "#2F1701"],
+      ["--color-brand-n90", "#170C00"],
+    ],
+  },
+  {
+    label: "Ink",
+    rows: [
+      ["--color-ink-p90", "#EBEBEA"],
+      ["--color-ink-p80", "#D8D8D5"],
+      ["--color-ink-p70", "#C4C4BF"],
+      ["--color-ink-p60", "#B1B1AA"],
+      ["--color-ink-p50", "#9D9D95"],
+      ["--color-ink-p40", "#898980"],
+      ["--color-ink-p30", "#75756C"],
+      ["--color-ink-p20", "#5F5F58"],
+      ["--color-ink-p10", "#4A4A45"],
+      ["--color-ink",     "#353531"],
+      ["--color-ink-n10", "#30302C"],
+      ["--color-ink-n20", "#2A2A27"],
+      ["--color-ink-n30", "#252522"],
+      ["--color-ink-n40", "#20201D"],
+      ["--color-ink-n50", "#1B1B18"],
+      ["--color-ink-n60", "#151514"],
+      ["--color-ink-n70", "#10100F"],
+      ["--color-ink-n80", "#0B0B0A"],
+      ["--color-ink-n90", "#050505"],
+    ],
+  },
+  {
+    label: "Brand B",
+    rows: [
+      ["--color-gold-p90", "#FEF4E4"],
+      ["--color-gold-p80", "#FEEAC9"],
+      ["--color-gold-p70", "#FDDFAE"],
+      ["--color-gold-p60", "#FDD493"],
+      ["--color-gold-p50", "#FCCA78"],
+      ["--color-gold-p40", "#FCBF5D"],
+      ["--color-gold-p30", "#FBB442"],
+      ["--color-gold-p20", "#FBAA27"],
+      ["--color-gold-p10", "#FA9F0C"],
+      ["--color-gold",     "#E69005"],
+      ["--color-gold-n10", "#CF8104"],
+      ["--color-gold-n20", "#B87304"],
+      ["--color-gold-n30", "#A16503"],
+      ["--color-gold-n40", "#8A5603"],
+      ["--color-gold-n50", "#734802"],
+      ["--color-gold-n60", "#5C3902"],
+      ["--color-gold-n70", "#452B01"],
+      ["--color-gold-n80", "#2E1D01"],
+      ["--color-gold-n90", "#170E00"],
+    ],
+  },
+  {
+    label: "Accent",
+    rows: [
+      ["--color-accent-p90", "#E4F8FE"],
+      ["--color-accent-p80", "#CAF2FD"],
+      ["--color-accent-p70", "#AFEBFC"],
+      ["--color-accent-p60", "#95E5FB"],
+      ["--color-accent-p50", "#7ADEFA"],
+      ["--color-accent-p40", "#60D8F9"],
+      ["--color-accent-p30", "#45D1F8"],
+      ["--color-accent-p20", "#2ACBF7"],
+      ["--color-accent-p10", "#10C4F6"],
+      ["--color-accent",     "#08B3E2"],
+      ["--color-accent-n10", "#07A1CC"],
+      ["--color-accent-n20", "#078FB5"],
+      ["--color-accent-n30", "#067D9E"],
+      ["--color-accent-n40", "#056B88"],
+      ["--color-accent-n50", "#045A71"],
+      ["--color-accent-n60", "#03485B"],
+      ["--color-accent-n70", "#023644"],
+      ["--color-accent-n80", "#02242D"],
+      ["--color-accent-n90", "#011217"],
+    ],
+  },
+  {
+    label: "Muted",
+    rows: [
+      ["--color-muted-p90", "#F7F6F9"],
+      ["--color-muted-p80", "#EEEEF2"],
+      ["--color-muted-p70", "#E6E5EC"],
+      ["--color-muted-p60", "#DEDDE6"],
+      ["--color-muted-p50", "#D5D4E0"],
+      ["--color-muted-p40", "#CDCCD9"],
+      ["--color-muted-p30", "#C5C3D3"],
+      ["--color-muted-p20", "#BCBBCD"],
+      ["--color-muted-p10", "#B4B2C6"],
+      ["--color-muted",     "#ACAAC0"],
+      ["--color-muted-n10", "#9795B1"],
+      ["--color-muted-n20", "#8380A1"],
+      ["--color-muted-n30", "#6F6C92"],
+      ["--color-muted-n40", "#5F5C7D"],
+      ["--color-muted-n50", "#4F4D68"],
+      ["--color-muted-n60", "#3F3E53"],
+      ["--color-muted-n70", "#302E3E"],
+      ["--color-muted-n80", "#201F2A"],
+      ["--color-muted-n90", "#100F15"],
+    ],
+  },
+].map(col => ({
+  ...col,
+  rows: col.rows.map(([v, hex]) => ({ v, hex, fg: bestTextColor(hex) })),
+}));
 ---
-<BaseLayout title="Moodboard">
-  <section class="py-section">
-    <h1 class="text-h1 font-bold">Moodboard</h1>
-    <p class="mt-gutter text-body">All swatches and samples below use token-backed utilities only.</p>
 
-    <div class="mt-section grid gap-gutter md:grid-cols-3">
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <div class="h-24 w-full bg-brand rounded-card"></div>
-        <p class="mt-gutter text-body">Brand</p>
-      </div>
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <div class="h-24 w-full bg-surface rounded-card"></div>
-        <p class="mt-gutter text-body">Surface</p>
-      </div>
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <div class="h-24 w-full bg-text rounded-card"></div>
-        <p class="mt-gutter text-body">Text (as bg for demo)</p>
-      </div>
-    </div>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Moodboard — Tokens, Cards, Spacing, Radii & Shadows</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Assistant 400/500/600/700 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-bg text-ink font-sans antialiased">
+    <main class="container-token mx-auto py-8 space-y-12">
+      <!-- Colors: 5 columns, each with 19 rows; text color is WCAG AA choice -->
+      <section aria-labelledby="colors">
+        <h1 id="colors" class="text-[length:var(--size-heading-2)] leading-[var(--line-heading-2)] font-[var(--weight-heading-2)]">
+          Color tokens & 19-step shades
+        </h1>
 
-    <div class="mt-section grid gap-gutter md:grid-cols-3">
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <p class="text-h1 font-bold">H1</p>
-        <p class="text-body mt-gutter">Token: <code>--text-h1</code></p>
-      </div>
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <p class="text-h2 font-semibold">H2</p>
-        <p class="text-body mt-gutter">Token: <code>--text-h2</code></p>
-      </div>
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <p class="text-body">Body text</p>
-        <p class="text-body mt-gutter">Token: <code>--text-body</code></p>
-      </div>
-    </div>
+        <div class="grid gap-6 mt-4 xl:example-grid-5">
+          {
+            ramps.map((col) => (
+              <figure class="card card--sm" aria-label={`${col.label} color ramp`}>
+                <div class="card-header">{col.label}</div>
+                <div class="card-body p-0">
+                  <div class="flex flex-col">
+                    {col.rows.map(({ v, hex, fg }) => (
+                      <div class="swatch-row" style={`background-color: var(${v}); color: ${fg};`} aria-label={`${col.label} ${v}`}>
+                        {hex}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div class="card-footer text-xs leading-5 opacity-75">
+                  {col.rows.map(({ v }) => (<code class="mr-2">{v}</code>))}
+                </div>
+              </figure>
+            ))
+          }
+        </div>
+      </section>
 
-    <div class="mt-section grid gap-gutter md:grid-cols-3">
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <div class="h-16 w-full rounded-card bg-surface shadow-elev-1"></div>
-        <p class="mt-gutter text-body">Shadow: <code>--shadow-elev-1</code></p>
-      </div>
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <div class="h-16 w-full rounded-card bg-surface"></div>
-        <p class="mt-gutter text-body">Radius: <code>--radius-card</code></p>
-      </div>
-      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <div class="rounded-card bg-surface p-gutter">Gutter padding</div>
-        <p class="mt-gutter text-body">Spacing tokens: section/gutter</p>
-      </div>
-    </div>
-  </section>
-</BaseLayout>
+      <!-- Typography -->
+      <section aria-labelledby="type" class="space-y-4">
+        <h2 id="type" class="text-[length:var(--size-heading-2)] leading-[var(--line-heading-2)] font-[var(--weight-heading-2)]">
+          Typography tokens
+        </h2>
+        <p style="font-size: var(--size-heading-1); line-height: var(--line-heading-1);" class="font-sans">
+          Heading 1 — The quick brown fox jumps over the lazy dog
+        </p>
+        <p style="font-size: var(--size-heading-2); line-height: var(--line-heading-2);" class="font-sans">
+          Heading 2 — The quick brown fox jumps over the lazy dog
+        </p>
+        <p style="font-size: var(--size-heading-3); line-height: var(--line-heading-3);" class="font-sans">
+          Heading 3 — The quick brown fox jumps over the lazy dog
+        </p>
+        <p style="font-size: var(--size-body); line-height: var(--line-body);" class="font-sans">
+          Body — The quick brown fox jumps over the lazy dog
+        </p>
+        <p style="font-size: var(--size-caption); line-height: var(--line-caption);" class="font-sans uppercase">
+          Caption — The quick brown fox
+        </p>
+        <p style="font-size: var(--size-monospace-body); line-height: var(--line-monospace-body);" class="font-mono">
+          Monospace Body — The quick brown fox jumps over the lazy dog
+        </p>
+      </section>
+
+      <!-- Radii & Shadows (card specimens using component tokens) -->
+      <section aria-labelledby="cards">
+        <h2 id="cards" class="text-[length:var(--size-heading-2)] leading-[var(--line-heading-2)] font-[var(--weight-heading-2)]">
+          Card system — spacing, radii, shadows
+        </h2>
+
+        <div class="example-grid mt-4">
+          <div class="card">
+            <div class="card-header">Default card</div>
+            <div class="card-body">
+              <p class="text-sm opacity-80">Radius: <code>var(--card-radius)</code></p>
+              <p class="text-sm opacity-80">Shadow: <code>var(--card-shadow)</code></p>
+              <p class="text-sm opacity-80">Padding: <code>var(--card-padding-y) var(--card-padding-x)</code></p>
+            </div>
+          </div>
+
+          <div class="card card--elevated">
+            <div class="card-header">Elevated</div>
+            <div class="card-body">
+              <div class="h-24 rounded-[var(--radius-md)]" style="background: var(--color-brand-p50);"></div>
+              <p class="mt-3 text-sm opacity-80">Uses <code>.card--elevated</code> → <code>--card-shadow: var(--shadow-lg)</code></p>
+            </div>
+          </div>
+
+          <div class="card card--sm">
+            <div class="card-header">Small</div>
+            <div class="card-body">
+              <p class="text-sm opacity-80">Compact padding &amp; <code>--radius-sm</code></p>
+            </div>
+          </div>
+
+          <div class="card card--lg">
+            <div class="card-header">Large</div>
+            <div class="card-body">
+              <p class="text-sm opacity-80">Spacious padding &amp; <code>--radius-lg</code></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Spacing tokens -->
+      <section aria-labelledby="spacing" class="space-y-4">
+        <h2 id="spacing" class="text-[length:var(--size-heading-2)] leading-[var(--line-heading-2)] font-[var(--weight-heading-2)]">
+          Spacing tokens
+        </h2>
+        <div class="space-y-3">
+          <div class="h-10 rounded-[var(--radius-sm)]" style="width: var(--spacing-112); background: var(--color-accent-p10);"></div>
+          <div class="h-10 rounded-[var(--radius-sm)]" style="width: var(--spacing-144); background: var(--color-accent-p20);"></div>
+          <div class="h-10 rounded-[var(--radius-sm)]" style="width: var(--spacing-192); background: var(--color-accent-p30);"></div>
+          <div class="h-10 rounded-[var(--radius-sm)]" style="width: var(--spacing-256); background: var(--color-accent-p40);"></div>
+          <div class="h-10 rounded-[var(--radius-sm)]" style="width: var(--spacing-320); background: var(--color-accent-p50);"></div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

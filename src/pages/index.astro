@@ -1,26 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
 ---
 <BaseLayout title="Home">
-  <section class="py-section">
-    <h1 class="text-h1 font-bold">Hello, world!</h1>
-    <p class="mt-gutter text-body max-w-prose">
-      Starter using Astro ^5 + Tailwind ^4 (tokens-only). No theme switching, no dark mode.
-    </p>
+  <main>
+    <Hero />
 
-    <div class="mt-section grid gap-gutter md:grid-cols-2">
-      <article class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <h2 class="text-h2 font-semibold">Token-backed card</h2>
-        <p class="mt-gutter text-body">
-          All colors, spacing, radius, shadows, and type sizes come from the single @theme block.
+    <!-- Keep a small content section so there is something below the hero for scroll/CTA verification -->
+    <section class="px-5 md:px-7 lg:px-8 py-16">
+      <div class="w-full max-w-[1600px] mx-auto">
+        <h2 class="text-xl font-semibold">Welcome</h2>
+        <p class="mt-2 max-w-prose">
+          This section exists to confirm hero spacing, breakpoint paddings, and CTA positioning.
         </p>
-        <a href="/moodboard" class="inline-block mt-gutter underline text-brand">Open moodboard →</a>
-      </article>
-      <article class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
-        <h2 class="text-h2 font-semibold">Health</h2>
-        <p class="mt-gutter text-body">Quick project sanity page.</p>
-        <a href="/health" class="inline-block mt-gutter underline text-brand">Open health →</a>
-      </article>
-    </div>
-  </section>
+      </div>
+    </section>
+  </main>
 </BaseLayout>
