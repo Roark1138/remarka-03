@@ -1,0 +1,15 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+export const prerender = true;
+---
+<BaseLayout title="Health">
+  <section class="py-section">
+    <h1 class="text-h1 font-bold">Health: OK</h1>
+    <ul class="mt-gutter list-disc pl-gutter text-body">
+      <li>Static output enabled</li>
+      <li>Tailwind v4 via <code>@tailwindcss/vite</code> active</li>
+      <li>Single-token-source stylesheet loaded</li>
+      <li>Dev server configured on port 4321</li>
+    </ul>
+  </section>
+</BaseLayout>

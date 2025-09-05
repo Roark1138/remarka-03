@@ -1,0 +1,33 @@
+---
+const { title = "Site" } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <style is:global>
+      @import "../styles/app.css";
+    </style>
+  </head>
+  <body class="bg-surface text-text antialiased">
+    <header class="border-b border-brand">
+      <nav class="mx-auto max-w-5xl p-gutter flex items-center justify-between">
+        <a href="/" class="font-medium">Home</a>
+        <ul class="flex gap-gutter">
+          <li><a href="/moodboard" class="hover:underline">Moodboard</a></li>
+          <li><a href="/health" class="hover:underline">Health</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-5xl p-gutter">
+      <slot />
+    </main>
+
+    <footer class="mt-section p-gutter text-sm opacity-70">
+      © {new Date().getFullYear()}
+    </footer>
+  </body>
+</html>

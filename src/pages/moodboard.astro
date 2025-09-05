@@ -1,0 +1,54 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Moodboard">
+  <section class="py-section">
+    <h1 class="text-h1 font-bold">Moodboard</h1>
+    <p class="mt-gutter text-body">All swatches and samples below use token-backed utilities only.</p>
+
+    <div class="mt-section grid gap-gutter md:grid-cols-3">
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <div class="h-24 w-full bg-brand rounded-card"></div>
+        <p class="mt-gutter text-body">Brand</p>
+      </div>
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <div class="h-24 w-full bg-surface rounded-card"></div>
+        <p class="mt-gutter text-body">Surface</p>
+      </div>
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <div class="h-24 w-full bg-text rounded-card"></div>
+        <p class="mt-gutter text-body">Text (as bg for demo)</p>
+      </div>
+    </div>
+
+    <div class="mt-section grid gap-gutter md:grid-cols-3">
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <p class="text-h1 font-bold">H1</p>
+        <p class="text-body mt-gutter">Token: <code>--text-h1</code></p>
+      </div>
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <p class="text-h2 font-semibold">H2</p>
+        <p class="text-body mt-gutter">Token: <code>--text-h2</code></p>
+      </div>
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <p class="text-body">Body text</p>
+        <p class="text-body mt-gutter">Token: <code>--text-body</code></p>
+      </div>
+    </div>
+
+    <div class="mt-section grid gap-gutter md:grid-cols-3">
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <div class="h-16 w-full rounded-card bg-surface shadow-elev-1"></div>
+        <p class="mt-gutter text-body">Shadow: <code>--shadow-elev-1</code></p>
+      </div>
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <div class="h-16 w-full rounded-card bg-surface"></div>
+        <p class="mt-gutter text-body">Radius: <code>--radius-card</code></p>
+      </div>
+      <div class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <div class="rounded-card bg-surface p-gutter">Gutter padding</div>
+        <p class="mt-gutter text-body">Spacing tokens: section/gutter</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

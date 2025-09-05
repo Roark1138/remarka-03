@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+<BaseLayout title="Home">
+  <section class="py-section">
+    <h1 class="text-h1 font-bold">Hello, world!</h1>
+    <p class="mt-gutter text-body max-w-prose">
+      Starter using Astro ^5 + Tailwind ^4 (tokens-only). No theme switching, no dark mode.
+    </p>
+
+    <div class="mt-section grid gap-gutter md:grid-cols-2">
+      <article class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <h2 class="text-h2 font-semibold">Token-backed card</h2>
+        <p class="mt-gutter text-body">
+          All colors, spacing, radius, shadows, and type sizes come from the single @theme block.
+        </p>
+        <a href="/moodboard" class="inline-block mt-gutter underline text-brand">Open moodboard →</a>
+      </article>
+      <article class="rounded-card shadow-elev-1 p-gutter bg-surface border border-brand">
+        <h2 class="text-h2 font-semibold">Health</h2>
+        <p class="mt-gutter text-body">Quick project sanity page.</p>
+        <a href="/health" class="inline-block mt-gutter underline text-brand">Open health →</a>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
