@@ -45,11 +45,20 @@
   /* Hero vertical rhythm */
   --hero-pt-base:6rem; --hero-pt-lg:3rem; --hero-pt-xl:4rem; --hero-pt-2xl:6rem; --hero-pb-base:1.5rem;
 
-  /* Hero typography tokens */
-  --hero-title-base:3rem;  --hero-title-md:3.75rem; --hero-title-lg:5.25rem; --hero-title-2xl:8.75rem; --hero-title-lh:.95;
-  --hero-subtitle-base:1.5rem; --hero-subtitle-md:1.875rem; --hero-subtitle-lg:3rem; --hero-subtitle-2xl:3.75rem; --hero-subtitle-lh:1.1;
+  /* Hero typography tokens (↓ ~30% from previous values) */
+  --hero-title-base:2.1rem;    /* was 3rem */
+  --hero-title-md:  2.625rem;  /* was 3.75rem */
+  --hero-title-lg:  3.675rem;  /* was 5.25rem (~84px→58.8px) */
+  --hero-title-2xl: 6.125rem;  /* was 8.75rem (~140px→98px) */
+  --hero-title-lh:  .95;
 
-  /* NEW: hero text color token */
+  --hero-subtitle-base:1.05rem;   /* was 1.5rem */
+  --hero-subtitle-md:  1.3125rem; /* was 1.875rem */
+  --hero-subtitle-lg:  2.1rem;    /* was 3rem */
+  --hero-subtitle-2xl: 2.625rem;  /* was 3.75rem */
+  --hero-subtitle-lh:  1.1;
+
+  /* Hero text color token */
   --color-hero-text: #FFFFFF;
 
   /* Card tokens */
