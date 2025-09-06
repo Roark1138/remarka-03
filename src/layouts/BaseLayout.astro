@@ -1,5 +1,5 @@
 ---
-const { title = "Site" } = Astro.props;
+const { title = "Site", contain = true } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -12,22 +12,30 @@ const { title = "Site" } = Astro.props;
     </style>
   </head>
   <body class="bg-surface text-text antialiased">
-    <header class="border-b border-brand">
-      <nav class="mx-auto max-w-5xl p-gutter flex items-center justify-between">
-        <a href="/" class="font-medium">Home</a>
-        <ul class="flex gap-gutter">
-          <li><a href="/moodboard" class="hover:underline">Moodboard</a></li>
-          <li><a href="/health" class="hover:underline">Health</a></li>
-        </ul>
+    <!-- Sticky Header / Nav (above hero area) -->
+    <header role="banner" class="sticky top-0 z-30 bg-header text-header border-0">
+      <nav class="px-page">
+        <div class="w-full max-w-content mx-auto flex items-center justify-between py-4">
+          <a href="/" class="font-semibold">Remarka</a>
+          <ul class="flex items-center gap-4">
+            <li><a href="/" class="hover:underline">Home</a></li>
+            <li><a href="/moodboard" class="hover:underline">Moodboard</a></li>
+            <li><a href="/health" class="hover:underline">Health</a></li>
+          </ul>
+        </div>
       </nav>
     </header>
 
-    <main class="mx-auto max-w-5xl p-gutter">
+    <main class={contain ? "px-page" : ""}>
       <slot />
     </main>
 
-    <footer class="mt-section p-gutter text-sm opacity-70">
-      © {new Date().getFullYear()}
+    <footer class="mt-16 border-0">
+      <div class="px-page">
+        <div class="w-full max-w-content mx-auto py-8 text-sm opacity-70">
+          © {new Date().getFullYear()} Remarka
+        </div>
+      </div>
     </footer>
   </body>
 </html>

@@ -1,0 +1,44 @@
+/* Token-bound utilities (Tailwind v4 custom utilities) */
+@utility px-page { padding-inline: var(--page-x); }
+@utility max-w-content { max-width: var(--container-max); }
+@utility gap-x-gutter { column-gap: var(--gutter-x); }
+@utility py-hero { padding-top: var(--hero-pt); padding-bottom: var(--hero-pb); }
+
+/* Hero type utilities (deterministic across pages) */
+@utility text-hero-title {
+  font-size: var(--hero-title);
+  line-height: var(--hero-title-lh);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-hero-text);
+}
+@utility text-hero-subtitle {
+  font-size: var(--hero-subtitle);
+  line-height: var(--hero-subtitle-lh);
+  font-weight: 600;
+  opacity: 0.9;
+  color: var(--color-hero-text);
+}
+
+/* Header background — 50% of --color-muted-n70 without affecting children */
+@utility bg-header { background-color: color-mix(in srgb, var(--color-muted-n70) 50%, transparent); }
+
+/* Header text color (and force all link states to white) */
+@utility text-header { color: var(--color-hero-text); }
+
+/* ---------- Fallback plain CSS (works even if @utility transform is cached) ---------- */
+.text-hero-title { font-size: var(--hero-title); line-height: var(--hero-title-lh); font-weight: 500; letter-spacing: -0.01em; color: var(--color-hero-text); }
+.text-hero-subtitle { font-size: var(--hero-subtitle); line-height: var(--hero-subtitle-lh); font-weight: 600; opacity: .9; color: var(--color-hero-text); }
+.bg-header { background-color: color-mix(in srgb, var(--color-muted-n70) 50%, transparent); }
+
+/* NEW: explicitly color all link states in header to avoid UA or utility overrides */
+.text-header,
+.text-header a,
+.text-header a:visited,
+.text-header a:hover,
+.text-header a:active,
+.text-header a:focus { color: var(--color-hero-text); }
+
+/* Optional: simple blink animation used by some variants */
+@keyframes blink { 0%,49%{opacity:1} 50%,100%{opacity:.2} }
+@utility animate-blink { animation: blink var(--blink-duration,1.2s) steps(1) infinite; }
