@@ -1,7 +1,8 @@
 ---
 /**
  * Full-bleed hero using tokenized spacing and typography.
- * Backdrop is fixed (non-scrolling) and fades out as you scroll ~1 viewport height.
+ * Backdrop: fixed and non-scrolling; z-0 (paired with page content lifted on index).
+ * Fades out over ~1 viewport height.
  */
 const srTitle = "Build sharp websites with Astro + Tailwind";
 ---
@@ -18,8 +19,8 @@ const srTitle = "Build sharp websites with Astro + Tailwind";
     </div>
   </div>
 
-  <!-- Backdrop layer: fixed, non-scrolling; fades with scroll -->
-  <div aria-hidden="true" data-hero-backdrop class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" style="opacity:1;will-change:opacity">
+  <!-- Backdrop layer: fixed, non-scrolling; z-0 to avoid initial flash -->
+  <div aria-hidden="true" data-hero-backdrop class="pointer-events-none fixed inset-0 z-0 overflow-hidden" style="opacity:1;will-change:opacity">
     <img
       src="/img/hero03.png"
       alt=""
@@ -45,7 +46,6 @@ const srTitle = "Build sharp websites with Astro + Tailwind";
   <!-- Inline script: fade backdrop opacity based on scroll progress -->
   <script is:inline>
     (function () {
-      // Respect users who prefer reduced motion
       try {
         if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
       } catch (_) {}
@@ -61,7 +61,6 @@ const srTitle = "Build sharp websites with Astro + Tailwind";
       function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
 
       function progress() {
-        // How far the page has scrolled since the top of the hero (0→1 over 1vh)
         var y = window.scrollY || window.pageYOffset || 0;
         var start = hero.offsetTop || 0;
         var scrolled = Math.max(0, y - start);
@@ -84,7 +83,6 @@ const srTitle = "Build sharp websites with Astro + Tailwind";
         apply();
       }
 
-      // init + listeners
       apply();
       window.addEventListener("scroll", onScroll, { passive: true });
       window.addEventListener("resize", onResize);

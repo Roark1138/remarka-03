@@ -10,9 +10,11 @@ const { title = "Site", contain = true } = Astro.props;
     <style is:global>
       @import "../styles/app.css";
     </style>
+    <!-- Allow pages to inject head-only tags (e.g., image preload) -->
+    <slot name="head" />
   </head>
   <body class="bg-surface text-text antialiased">
-    <!-- Sticky Header / Nav (above hero area) -->
+    <!-- Sticky Header / Nav -->
     <header role="banner" class="sticky top-0 z-30 bg-header text-header border-0">
       <nav class="px-page">
         <div class="w-full max-w-content mx-auto flex items-center justify-between py-4">

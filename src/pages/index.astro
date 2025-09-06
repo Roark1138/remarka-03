@@ -3,44 +3,52 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 ---
 <BaseLayout title="Home" contain={false}>
+  <!-- Page-scoped preload of the hero backdrop image -->
+  <Fragment slot="head">
+    <link rel="preload" as="image" href="/img/hero03.png" fetchpriority="high" />
+  </Fragment>
+
   <Hero />
 
-  <!-- Welcome section (restored) -->
-  <section class="px-page py-16">
-    <div class="w-full max-w-content mx-auto">
-      <h2 class="text-xl font-semibold">Welcome</h2>
-      <p class="mt-2 max-w-prose">
-        This section confirms hero spacing, breakpoint paddings, and CTA positioning.
-      </p>
-    </div>
-  </section>
+  <!-- Lift ONLY the post-hero content above the z-0 backdrop -->
+  <div class="relative z-10">
+    <!-- Welcome section -->
+    <section class="px-page py-16">
+      <div class="w-full max-w-content mx-auto">
+        <h2 class="text-xl font-semibold">Welcome</h2>
+        <p class="mt-2 max-w-prose">
+          This section confirms hero spacing, breakpoint paddings, and CTA positioning.
+        </p>
+      </div>
+    </section>
 
-  <!-- Lower section with two cards (restored) -->
-  <section class="px-page pb-20">
-    <div class="w-full max-w-content mx-auto grid gap-x-gutter gap-y-8 md:grid-cols-2">
-      <article class="card">
-        <div class="card-header">
-          <h3 class="text-lg font-semibold">Design & Build</h3>
-        </div>
-        <div class="card-body">
-          <p>Production-ready Astro + Tailwind sites with a clean token system and accessible UI.</p>
-        </div>
-        <div class="card-footer">
-          <a href="/work" class="btn-ghost">See work →</a>
-        </div>
-      </article>
+    <!-- Lower section with two cards -->
+    <section class="px-page pb-20">
+      <div class="w-full max-w-content mx-auto grid gap-x-gutter gap-y-8 md:grid-cols-2">
+        <article class="card">
+          <div class="card-header">
+            <h3 class="text-lg font-semibold">Health Check</h3>
+          </div>
+          <div class="card-body">
+            <p>Run a quick site health review: speed, accessibility, and basic SEO signals.</p>
+          </div>
+          <div class="card-footer">
+            <a href="/health" class="btn-outline">Open Health →</a>
+          </div>
+        </article>
 
-      <article class="card">
-        <div class="card-header">
-          <h3 class="text-lg font-semibold">Operate & Grow</h3>
-        </div>
-        <div class="card-body">
-          <p>Practical improvements: speed, SEO, on-page UX, and content systems tuned for small teams.</p>
-        </div>
-        <div class="card-footer">
-          <a href="/contact" class="btn-outline">Start a project →</a>
-        </div>
-      </article>
-    </div>
-  </section>
+        <article class="card">
+          <div class="card-header">
+            <h3 class="text-lg font-semibold">Moodboard</h3>
+          </div>
+          <div class="card-body">
+            <p>Browse your color and type tokens rendered live to guide UI decisions.</p>
+          </div>
+          <div class="card-footer">
+            <a href="/moodboard" class="btn-ghost">Open Moodboard →</a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
 </BaseLayout>
