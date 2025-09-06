@@ -1,12 +1,11 @@
 ---
 /**
- * Hero with non-scrolling backdrop (fixed to viewport).
- * - Spacing/utilities: px-page, max-w-content, gap-x-gutter, py-hero
- * - Typography: text-hero-title (w-500, white), text-hero-subtitle (white)
+ * Full-bleed hero using tokenized spacing and typography.
+ * Backdrop is fixed (non-scrolling) and fades out as you scroll ~1 viewport height.
  */
 const srTitle = "Build sharp websites with Astro + Tailwind";
 ---
-<section aria-labelledby="hero-heading" class="relative w-full min-h-[100svh] flex items-start px-page py-hero">
+<section aria-labelledby="hero-heading" data-hero="super" class="relative w-full min-h-[100svh] flex items-start px-page py-hero">
   <!-- Foreground content container -->
   <div class="relative z-10 w-full max-w-content mx-auto grid auto-rows-min auto-cols-fr gap-x-gutter">
     <h1 id="hero-heading" class="sr-only">{srTitle}</h1>
@@ -19,8 +18,8 @@ const srTitle = "Build sharp websites with Astro + Tailwind";
     </div>
   </div>
 
-  <!-- Backdrop layer: fixed, non-scrolling; sits behind content (-z-10) -->
-  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+  <!-- Backdrop layer: fixed, non-scrolling; fades with scroll -->
+  <div aria-hidden="true" data-hero-backdrop class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" style="opacity:1;will-change:opacity">
     <img
       src="/img/hero03.png"
       alt=""
@@ -42,4 +41,53 @@ const srTitle = "Build sharp websites with Astro + Tailwind";
       </a>
     </div>
   </div>
+
+  <!-- Inline script: fade backdrop opacity based on scroll progress -->
+  <script is:inline>
+    (function () {
+      // Respect users who prefer reduced motion
+      try {
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      } catch (_) {}
+
+      var hero = document.querySelector('[data-hero="super"]');
+      if (!hero) return;
+      var backdrop = hero.querySelector("[data-hero-backdrop]");
+      if (!backdrop) return;
+
+      var distance = Math.max(window.innerHeight, 1); // fade over ~1 viewport height
+      var ticking = false;
+
+      function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+
+      function progress() {
+        // How far the page has scrolled since the top of the hero (0→1 over 1vh)
+        var y = window.scrollY || window.pageYOffset || 0;
+        var start = hero.offsetTop || 0;
+        var scrolled = Math.max(0, y - start);
+        return clamp01(scrolled / distance);
+      }
+
+      function apply() {
+        var p = progress();
+        backdrop.style.opacity = String(1 - p);
+      }
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function(){ apply(); ticking = false; });
+      }
+
+      function onResize() {
+        distance = Math.max(window.innerHeight, 1);
+        apply();
+      }
+
+      // init + listeners
+      apply();
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onResize);
+    })();
+  </script>
 </section>
